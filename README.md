@@ -1,49 +1,44 @@
-![CF](http://i.imgur.com/7v5ASc8.png) 14: Mongo/Express 2 Resource API
+13: Single Resource Mongo and Express API
 ===
 
+## Configuration
+Using port 3000 for server and MONGODB_URI=mongodb://localhost:27017/ for mongo database use. 
 
-## Submission Instructions
-* Work in a fork of this repository
-* Work in a branch on your fork
-* Create a PR to your master from your working branch.
-* Ensure that your repository/branch is connected to travis-ci.com
-* Ensure that your repository/branch is connected to a dyno at heroku.com
-* Heroku and Travis should pick you up and deploy
-* Submit on canvas:
-  * a question and observation
-  * how long you spent
-  * link to your pull request
-  * link to your build at travis-ci URL
-  * Heroku Server URL
+### Testing and Verification
+Using 'POSTMAN'
 
-## Configuration 
-Configure the root of your repository with the following files and directories. Thoughfully name and organize any aditional configuration or module files.
-* **README.md** - contains documentation
-* **.env** - contains env variables (should be git ignored)
-* **.gitignore** - contains a [robust](http://gitignore.io) `.gitignore` file 
-* **.eslintrc** - contains the course linter configuratoin
-* **.eslintignore** - contains the course linter ignore configuration
-* **.travis.yml** - contains the course linter ignore configuration
-* **package.json** - contains npm package config
-  * create a `lint` script for running eslint (eslint **/*.js)
-  * create a `test` script for running tests
-  * create a `start` script for running your server
-* **index.js** - the entry point for your application
-* **src/** - contains your core application files and folders
-* **src/app.js** - (or main.js) contains your core application bootstrap
-* **src/lib/** - contains module definitions
-* **\_\_test\_\_/** - contains unit tests
+GET - localhost:3000/api/v1/students
+ expect -  will receive ALL inputted data for students.  
 
-## Learning Objectives  
-* students will be able to create a 2 resource MongoDB and Express API
-* students will be able to reference additional resources as part of their mongoose.js based data models
-* students will be able to use the `populate` method to allow for resource query population
+GET - localhost:3000/api/v1/students/id
+ expect - will receive ONE ID data. 
 
-## Requirements
+POST - localhost:3000/api/v1/students
+  input -  send text string: {"name": "name text", "gradeLevel":number, "isPassing":boolean}
+  expect -  will post the new data in the database. 
 
-#### Feature Tasks
-  * continue working on the `express` and `mongoDB` REST API that you started yesterday
-  * include an additional resource that contains a "relationship" to the single resource that has already been created
-  * create `GET`, `POST`, `PUT`, and `DELETE` routes for your newly added resource
-  * test your application to ensure that it meets the standard criteria of a working **full CRUD** REST API
-  * use `populate` in the `get()` route logic your  `/api/new-resource-name/:id` route to populate the associated property used to house related resources **(ex: `List.findById(req.params.id).populate('notes')`)**
+PUT - localhost:3000/api/v1/students
+  input -  send text string which may include any of the following: {"name": "name text", "gradeLevel":number, "isPassing":boolean} to update
+  expect -  will update the document selected by id with new data sent. 
+
+DELETE - localhost:3000/api/v1/students/id
+expect - the document with the ID inputted, will be deleted. 
+
+
+
+## Server Endpoints
+### `/api/v1/resource-name`
+* `POST` request
+  * should pass data as stringifed JSON in the body of a post request to create a new resource
+### `api/v1/resource-name`
+* `GET` request
+* Fetch all resources
+### `/api/v1/resource-name/:id`
+* `GET` request
+  * should pass the id of a resource through the url endpoint to get a resource
+    * **this should use `req.params`, not querystring parameters**
+* `PUT` request
+  * should pass data as stringifed JSON in the body of a put request to overwrite a pre-existing resource
+* `DELETE` request
+  * should pass the id of a resource though the url endpoint to delete a resource
+    * **this should use `req.params`**
