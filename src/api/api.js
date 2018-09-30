@@ -42,6 +42,10 @@ router.post('/api/v1/:model', (req,res,next) => {
 
 let sendJSON = (res, data) => {
   res.status(200).json(data);
+  res.statusMessage = 'OK';
+  res.setHeader('Content-Type', 'application/json');
+  res.write( JSON.stringify(data) );
+  res.end();
 };
 
 
