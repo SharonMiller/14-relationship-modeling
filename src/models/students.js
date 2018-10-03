@@ -7,7 +7,7 @@ const studentSchema = mongoose.Schema({
   name: { type: String, required: true },
   gradeLevel: { type: Number, min: 1, max: 12, required: true },
   createdOn: { type: Date, default: Date.now() },
-  classes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'classes' }],
+  _class: { type: mongoose.Schema.Types.ObjectId, ref: 'classes' },
 });
 studentSchema.pre('findOne', function (next) {
   this.populate('classes');
@@ -16,12 +16,11 @@ studentSchema.pre('findOne', function (next) {
 
 studentSchema.pre('save', function (next) {
   let studentId = this._id;
-  let classId = this.class;
-
+  let classId = this._class;
 
   Classes.findById(classId)
-    .then(className => {
-      if (!className) {
+    .then(_class => {
+      if (!_class) {
         return Promise.reject('invalid request');
       }
 
@@ -29,12 +28,12 @@ studentSchema.pre('save', function (next) {
         { _id: classId },
         { $addToSet: { students: studentId } }
       )
-
         .then(Promise.resolve())
         .catch(err => Promise.reject(err));
     })
-    .then(Promise.resolve())
+    .then(next)
     .catch(err => Promise.reject(err));
+
 });
 
 export default mongoose.model('students', studentSchema);
